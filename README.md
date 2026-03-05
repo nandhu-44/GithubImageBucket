@@ -8,6 +8,7 @@ It now supports **multi-project buckets**, **API-key verification**, and an opti
 ## Table of Contents
 
 - [What Changed](#what-changed)
+- [Attribution](#attribution)
 - [Installation](#installation)
 - [Environment Variables](#environment-variables)
 - [API Endpoints](#api-endpoints)
@@ -32,6 +33,16 @@ Compared to the original single-folder API, this version adds:
 - Project creation/listing endpoints.
 - Upload overwrite support (re-upload same filename updates existing file).
 - Next.js frontend using a server-side proxy route (`/api/[...path]`) so browser clients do not need direct backend credentials.
+
+---
+
+## Attribution
+
+This project is based on the original work from:
+
+- https://github.com/MasFana/Github-Image-Bucket-API
+
+The initial API concept and core GitHub file-bucket flow came from that repository, and this codebase extends it with multi-project routing, API-key verification, overwrite-safe uploads, and an optional Next.js frontend.
 
 ---
 
