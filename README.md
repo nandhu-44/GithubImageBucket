@@ -9,6 +9,7 @@ It now supports **multi-project buckets**, **API-key verification**, and an opti
 
 - [What Changed](#what-changed)
 - [Attribution](#attribution)
+- [Image Bucket Repo Setup](#image-bucket-repo-setup)
 - [Installation](#installation)
 - [Environment Variables](#environment-variables)
 - [API Endpoints](#api-endpoints)
@@ -43,6 +44,91 @@ This project is based on the original work from:
 - https://github.com/MasFana/Github-Image-Bucket-API
 
 The initial API concept and core GitHub file-bucket flow came from that repository, and this codebase extends it with multi-project routing, API-key verification, overwrite-safe uploads, and an optional Next.js frontend.
+
+---
+
+## Image Bucket Repo Setup
+
+This API stores uploaded files in a separate GitHub repository (the image bucket repo).
+
+### 1. Create the bucket repository
+
+1. Create a new GitHub repository (recommended: **Private**).
+2. Name it something like `my-image-bucket`.
+3. Initialize it with a `README.md` so it has an initial commit.
+
+### 2. Ensure the target branch exists
+
+1. Open repository settings and check the default branch.
+2. Use `main` unless you explicitly want another branch.
+3. If needed, create `main` and set it as default.
+
+This value must match your backend env:
+
+- `GITHUB_BRANCH=main`
+
+### 3. Create a GitHub token
+
+Create a token from GitHub settings:
+
+- Path: `Settings -> Developer settings -> Personal access tokens`
+- Use either fine-grained PAT or classic PAT.
+
+Minimum required capability for this API:
+
+- Repository contents read/write access.
+
+For a fine-grained token, grant:
+
+- `Contents: Read and write`
+- Repository access limited to your bucket repo.
+
+Copy token value and keep it secret.
+
+### 4. Map repo details to backend env
+
+Set these values in root `.env`:
+
+```env
+PORT=5000
+API_KEY=replace_with_secure_api_key
+GITHUB_TOKEN=replace_with_your_token
+GITHUB_REPO=your-github-username/my-image-bucket
+GITHUB_BRANCH=main
+```
+
+### 5. Start backend and initialize first project
+
+1. Start backend:
+
+```bash
+npm start
+```
+
+2. Create your first project folder using API (example with PowerShell):
+
+```powershell
+$headers = @{ "x-api-key" = "<API_KEY>"; "Content-Type" = "application/json" }
+$body = '{"projectName":"demo-app"}'
+Invoke-RestMethod -Method Post -Uri http://localhost:5000/projects -Headers $headers -Body $body
+```
+
+This creates:
+
+- `uploads/demo-app/_placeholder.txt`
+
+and then uploads will go under that project folder.
+
+### 6. (Optional) Frontend proxy env
+
+If using `frontend/`, set:
+
+```env
+BACKEND_BASE_URL=http://localhost:5000
+BACKEND_API_KEY=replace_with_secure_api_key
+```
+
+The frontend server will proxy requests and inject `x-api-key` server-side.
 
 ---
 
