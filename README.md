@@ -5,6 +5,10 @@
 This project is a proof of concept for using a GitHub repository as an image hosting service.
 It now supports **multi-project buckets**, **API-key verification**, and an optional **Next.js frontend**.
 
+## Documentation
+
+- Live docs: https://nandhu-44.github.io/GithubImageBucket/
+
 ## Table of Contents
 
 - [What Changed](#what-changed)
